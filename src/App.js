@@ -182,10 +182,7 @@ function App() {
     </div>
     ))}
     </div>
-    {/* <div>
-      Total Cost: ${getTotalSum()}
-    </div> */}
-    </>
+       </>
   )
 
 
@@ -193,7 +190,7 @@ function App() {
   return (
     <div className="App">
       <header>
-        <Button variant="success"  size="lg" className='cartBtn' onClick ={() => navigateTo(PAGE_CART)}>Cart ({cart.length})</Button>
+        <Button variant="success"  size="lg" className='cartBtn' onClick ={() => navigateTo(PAGE_CART)}>Go to Cart ({cart.length})</Button>
         <Button variant="secondary" className='cartBtn' onClick ={() => navigateTo(PAGE_PRODUCTS)}>View Products</Button>
       </header>
       {page === PAGE_PRODUCTS && renderProducts()}
