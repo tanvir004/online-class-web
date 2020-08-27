@@ -36,3 +36,58 @@
     transform: rotate(360deg);
   }
 }
+
+.products{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.products img{
+  width: 20%;  
+}
+.product{
+  padding: 40px;
+  
+}
+button{
+  font-size: 20px;
+  padding: 10px;
+}
+
+header{
+  height: 50px;
+  padding-top: 20px;
+  position: fixed;
+}
+.cartBtn{
+  background: blue;
+  color: gold;
+  border: none;
+  border-radius: 30px;
+  font-weight: 700;
+  margin: 5px;
+}
+.cartBtn:hover{
+  background-color: blueviolet;
+}
+.headline{
+  background-image: linear-gradient(to right, white,rgb(66, 62, 62),white );
+  margin: auto;
+  width: 30%;
+  padding:10px;
+  color: white;
+  border-radius: 10px;
+  font-weight: 700;
+
+}
+.heading{
+  background:Black;
+  color: white;
+  padding: 10px;
+  font-weight: 700;
+}
+.priceColor{
+  color:orangered;
+}
+.totalPrice{
+  color: red;
+}

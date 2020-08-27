@@ -1,24 +1,204 @@
-import React from 'react';
+import React, {useState} from 'react';
 import logo from './logo.svg';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Button from 'react-bootstrap/Button';
+
+
+const PAGE_PRODUCTS = 'products';
+const PAGE_CART = 'cart';
 
 function App() {
+  const [cart, setCart] = useState([]);
+  const [page, setPage] = useState(PAGE_PRODUCTS);
+  const [products] = useState([
+    {
+      name: 'Microsoft Word',
+      cost: 8.0,
+      image: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBw4NEQ8NEBIQDg4QEBAPDw0OEBsNEA0QGRIYFhUWExMYHSggGBsxHRMTIzEhJSkrLi4uFx8zODMsNygtMCsBCgoKDg0OGxAQGi0fHyUwODUyLS0rNSstLS0rKy0xKzUtLS0yLS0tKy0tNy0tLS0tLS0tLS0vLSstLS0tLS0tLf/AABEIANkA6QMBEQACEQEDEQH/xAAcAAEAAQUBAQAAAAAAAAAAAAAAAQIFBgcIBAP/xABJEAABAwIBBwcHCgQDCQAAAAAAAQIDBBGRBRITFCExUQYHQVJhcYEiMnKSobHBNEJUYpSisrPS8BU1U4IXI0MWJCWDk8LD0dP/xAAaAQEAAgMBAAAAAAAAAAAAAAAABAUBAgMG/8QAMhEBAAIBAgMFCAEEAwEAAAAAAAECEQMSBDFRBRMhYfAyM0FSgZGx4aEUIsHRFXHxJP/aAAwDAQACEQMRAD8A3iAAAAAAD5VdQ2Fj5XeaxquW2+yJfYbUpN7RWPi1veKVm08oayypluoqnK5z3NZfyYmOVGNThs3r2qeh0eG09KMRHj1ec1uJ1NWczOI6LfpHcVxO+IcMyaR3FcRiDMmkdxXEYgzJpHcVxGIMyaR3FcRiDMmkdxXEYgzJpHcVxGIMyaR3FcRiDMmkdxXEYgzJpHcVxGIMyaR3FcRiDMmkdxXEYgzJpHcVxGIMyaR3FcRiDMmkdxXEYgzJpHcVxGIMyaR3FcRiDMmkdxXEYgzJpHcVxGIMynSO4riMQZldci8oJ6V6Xc6SG/lxuXOsnFt9y+8ja/CU1a+EYnqlcPxd9K3jOY6f6bC/iUH9RuJRdzfovu+p1eo5ugAAAAAFo5WfI5+5v42krgvf19fBF433FvXxayPQPOAAAAAAAAAAAAAAAAAAAAAAAABXpHcVxGIZzLcJ5V6wAAAAAC0crPkc/c38bSVwXv6+vgi8b7i3r4tZHoHnAAAAAAAAAAAAAAAAAAAAAAAAAAbkPKvWgAAAAAWjlZ8jn7m/jaSuC9/X18EXjfcW9fFrI9A84AAAAAAAAAAAAAAAAAAAAAAAAADch5V60AAAAAC0crPkc/c38bSVwXv6+vgi8b7i3r4tZHoHnAAAAAAAAAAAAAAAAAAAAAAAAAAbkPKvWgAAAAAWblg61FUL2M/MaSeD99X18EbjPcW9fFq3WF4IX+557aawvBBuNprC8EG42msLwQbjaawvBBuNpp14INxtNOvBBuNprC8EG42qmTou/Z2mdzE1fUy1AAAAAAAAAAAAAAALly15cTrNJS0j1hiicrHyt8+V6LZ2avzWouzZtW2+xA4TgabYvqRmZ+C54jirbttJxEMQXLdb9KqvtMn6if3Ol8sfaETvL/NP3lH8arfpVV9pk/UO50vlj7Qd5f5p+8o/jVb9KqvtMn6h3Ol8sfaDvL/NP3k/jdb9KqvtMn6h3Ol8sfaDvL/NP3k/jdb9KqvtMn6h3Ol8sfaDvL/NP3lRLlereitdUVL2rva+d7mr3orrKZjS04nMVj7QTe0xiZmfq82nf1nespviGmIRp39Z3rKMQYg07+s71lGIMQjTv6zvWUYgxBp39Z3rKMQYg07+s71lGIMQjTv67/WUYgxCFq5GeVnu2b7qrkwUj62nMRuq3rET4TC6UOUmStuqojk2KnR3oa0tuhyvpzWVziq47J5SHaInDhNZyq1qPrIZwbZNaj6yDBtk1qPrIMG2TWo+sgwbZNaj6yDBtk1qPrIMG2TWo+sgwbZNaj6yDBtk1qPrIMG2TWo+sgwbZNaj6yDBtk1qPrIMG2TWo+sgwbZY05yqqqu1VW6rxU3SlIYAIAAQZACAAEBkAAQAAol813cvuNb+zLNeb5ZK853op7yFoc5ddbkvUW5CZXkizzVmzAAAAAAAAAAAAAAC3h0QAAgAZEAAIABkAgAAAgyKZNy9y+41v7MsxzfLJXnO9H4kHQ5y66vJeotyEyvJFnmrNmAAAAAAAAAAAAAAFuDoAZZyX5ELlKDWG1DYrPdG6NYVerVSy789OhWru6SDxHHRo32zXP1/SVo8LOrXdFsfRcMoc2UsMUsyVLZFjjfIkaQK1X5rVXNRc9bXsc6dp1taK7cZ8/06W4G0Vmd2fp+2A3LNBAL5yS5NvypJJE2RIUjYj3SKzSbVdZG2un1lv2EbieJjQrEzGcu+hoTqzMROMMo/wpk+ls+zr/8AQhf8rX5P5/ST/QT838ftinKzk6/JczIXPSVHxpI2RGaNPOVFba67UsnrITuG4iNes2iMIutozpWxM5WQkOSHLbaZOTYsPNVI5rXLVtaqtRVbq6rmqqbUvpNpUz2rWJ9j+f0nxwE/N/H7WPlfyOXJUcUjqhJlkkViMSLRWRGqquvnr2J4knheM7+0xFcY8/046/D91ETnLFSajKZNy9y+41v7MsxzfPJXnO9H4kHQ5y66vJeotyEyvJFnmrNmAAAAAAAAAAAAAAFtMugBsfmdrdtXTKvUnan3H/8AjKjtWns3+nr+VjwFvar9Wy3NRUVF2oqWVOKFOsXOVfSrBLLAu+KWSLb05rlb8D1tLb6xbrDz9q7ZmvR8DZhtfmfos2nqKhUsssyMReLGN/U9+BSdqXzqRXpH5WfAVxSbdZ/DPirTmveeKizoaapRNscronL9V7b7fGNMS17Lvi9qdY/CBx1f7Yt68Wqy6Vr25CpNYqaaC10knia5PqZ6Z3suc9a+zTtbpDfTruvEebok8ovmo+eCtz6qCnTdDCr19KR21MI24l72XTGnNus/hV8dbN4r0j8sCuWaEpk3L3L7jW/syzHNRkrznej8SDoc5ddXkvUW5CZXkizzVmzAAAAAAAAAAAAAAC2GXQAyXm5rdBlCDobKj4Hf3Nu37zWEPj6btCfLxSeEtt1Y8/Bu884uWj+cak0OUajoSVI5m/3NRF+81x6PgL7tCvl4Kbiq41Z82MkxHb65E0Wr0FJHayrEkjk6Uc9dIt/Fx5ni779a0+f48F3w9dulWPXi+1LlLPrqmlvsip6Z6J9Zzpc/2aI1tp40a36zP+P22i+dSa+Uf5eflzQ6xQVcaJdzY1lbxzo1R6W9W3ibcHfZr1n14+DXiK7tKY9eDQx6dSMq5sKXS5Rid0QxyzL6ujT2yIQe0bbdCfPw/wA/4SeErnVjybtPOrhz9yyrdZrquXemmdG30Y/8tLepfxPUcLTZo1jy/PipNe27UtPrwWYkOSmRdi9y+41v7MsxzU5K853o/Eg6HOXTV5L1FuQmV5Is81ZswAAAAAAAAAAAAAAtZl0Ay+tLUrDJHM3zopGSt72uRye4xau6s16/5InbMT0dGxSI9rXt2tciOavFFS6HkpjE4l6GJy1jzx0lpKSoRPOZJC5fRVHNT77y57Kv/bav1VvH18a2YFk6kWomhp0/1ZY4tnQjnI1V9pZ3vsrNukIVa7rRXq6Na1ERETYiJZE4IeSX7VuQss52X53X8id01KnDyGojVxgT1i61tHHBRHTE/f8A9Vmnqf8A0z5+H2/8bSc1FRUXaipZU4oUqzc4ZSpFpppqdd8MskW3pRrlRFwRFPW6d99It1hQWrttNejYHMzS3dWVC9CRQtXvznO/7Cr7Vv4Vr9U7gK+NrNi5XrUpoJ6hd0UUknfmtVUT2FTpU33ivWU+9ttZt0c33Vdq7VXaq8V6T1qhRcCl67F7lNb+zLMczJXnO9H4kHQ5y6avJeotyEyvJFnmrNmAAAAAAAAAAAAAAFrMuoBAG9eb+t0+T6V3Sxmhd/y1ViexqL4nmuNps17ff7rnhbbtKPXJbedej0lBpOmCaOTwW8a/mIvgduzb41sdY/bTja5089J/TBebKi02UIndELJJl9XMT2yIvgWXaF9uhMdfBC4SudWPJuPKlWlPDNULuiikkXtzWqvwKDTpvvFY+Mra9ttZt0c85PrXQTQ1KqquilZMq9Lla5HLjZcT1V6Rak06xhRVtNbRZ0exyORFTaioiovFDyS/aT50aHQ5QkenmzxxzJwvbMd7Y7+J6Ls6+7QiOnh/lUcXXGrM9Wdc09Jo8npJ0zzSyeCKkafl+0re0r7tfHSP2mcHXGlnqr51a7Q5Pey9nTyRwp3Xz3exip4mOzqbteJ6eLPGWxpY6tJ3PQqlAZUSLZF7l9xrf2ZZjm+OTKpEc7Yu74kLQjxl11a+C8RVyWTYpNrHgizXxVa8nBcTOGNprycFxGDaa8nBcRg2mvJwXEYNprycFxGDaa8nBcRg2mvJwXEYNprycFxGDaa8nBcRg2mvJwXEYNprycFxGDaa8nBcRg2p15vBRg2vIG4AA2jzOVt46qmX5kjJm9z25q28Y09Ypu1aYtW/0+yy4C3hNWZ8paPWaSqgTa58EiN9PNVW+1EK/h77NWtvNL1a7qTXyYNzM0fk1dUvSscLV4WRXu/GzAsu1b+NafVC4Cvhay/86FbocnytvZ0z44W9t1znJ6rHEXs6m7Xienj6+rvxlsaU+bSJ6JUN+cha7WMn0kl7ubEkTl6c6NVjW/q38TzHGU2a9o8/z4rvh7btKJYrzz0V46WqT5j3wu7ntzkv/wBNfWJvZV/7rU6+P2RuOr4RZmnJaj1eipIVSzmQRZyfXVqK72qpX8Rffq2t5pejXbpxHk17zz115aSmRfMY+ZydrlzWfgfiWnZVP7bX+nr+ELjreMVa3LZBLgfOZfJd6K+41v7Ms15w8OT969xD0Ocu+ryXSPcTa8kaVRswAAAAAAAAAAAAAA+hqIMgBl3NbXaHKDI13TxSRdmciaRF+4qeJA7Rpu0M9J/SVwdsauOrdJ55brByJyYlJTLFbN/3iqW3Yk72t+61pK4vV7zUz5R+P9uOhTZTHnP5YdzzVu2kpkXckk7kwYxfzCf2VTwtf6ev4ROOt7NWtLlugNr8zVdnQVNMq7YpWyonBr22snjG5fEpO1aYvW/WPwsuBt/bNfXiybltkzXKN8HSskCp2f5zM77ucQ+E1e71Yt/3+EjXpvpt9c1+QjOzQnOHXaxlGqci3bG5sDezMaiOT1889LwNNmhXz8fv+lPxNt2rLG7ktwRcCiXzXeivuNb+zLavOHiyfvXuIehzl21eS6R7ibXkjSqNmAAAAAAAAAAAAAAFZgQAA9WSK3VqiCo3aKWORbdVHIrkwunic9Wm+k16w2pbbaLdHRqLc8mvxERN2zeuziq3UDRnOXW6fKM6b2wpHA3+1uc77z3npOApt0I8/FT8Vbdqz5MWuTEdmfNPXaKvSJV8mohkjt0K9tpGrgx+JX9pU3aOek/pL4O2NTHVulURd+08+tXzq6hsMckrtjY2OkcvBrUVV9xtWs2mIj4sTOIy5nnndK50rvPkc6R3pOW6+1VPWxEVjEfBRZz4y+ZkAPnKvku7l9xrf2ZZrzeTJ+9e74kPQ5y7avJdI9xNryRpVGzAAAAAAAAAAAAAACowIuBAEKGW0clc6FNFBBFLDUPljiYx72oxWvc1qIqpd6LttcptTsy9rzNZjEz5/wCljTjaxWImJy9X+K9F/QqsI/1mn/FanzR/P+m39dTpLVNfUrPLLOu+WWSVexXOV3xLqldtYr0hXWndMy85sw9mRq9aWop6lLroZWSKib3NRfKRO9t08Tnq07yk16w2pbbaLdG0f8WaL+hVYR/rKf8A4rU+aP5/0sf62nSVr5Tc5VPV0tRTQxVDJJmaNHyIxGo1VRHXs5V83O6DrodnX09SL2mMQ56vF1tSaxE+LWZboKLgRcCiVfJd3L7jW/sy2jm8uT97u74kPQ5y66vJdI9xNryRpVGzAAAAAAAAAAAAAAAYAMouBFwIAgMlwIuBFwIDKLgRcCLgAyol3O7l9xrf2ZZjm82T97u74kPQ5y66vJdI9xNryRpVGzAAAAAAAAAAAAAAAphlTcCLgAyi4EXAi4EBkuBFwIuBAZQBFwKJF2L3L7jW/syzHN8Mn73d3xIehzl11eS6R7ibXkjSqNmAAAAAAAAAAAAAAGX8vOR9RSTS1ETHS0kr3SI6NqvWBVW6teibkvey7rW6Sv4PjKalIracWj+UviOHtS0zEZiWF6RvFMSwxKKjSN4piMSI0jeKYjEso0jeKYjEiNI3imIxII9OKYjEspMCAIABlAEAQoZeCurERMxqorl322o1CHxGvERtrzdtPTmfGXzop3Iq7txx0bTmW+pWMLgyqdbowJcak4cJpCrW39mBnvJY7uDW39mA7yTu4Nbf2YDvJO7g1t/ZgO8k7uDW39mA7yTu4Nbf2YDvJO7g1t/ZgO8k7uDW39mA7yTu4Nbf2YDvJO7g1t/ZgO8k7uDW39mA7yTu4Nbf2YDvJO7hOuO4N9v/ALG+TZDqc8qu0K1OCYDIjMTgmBnIZicEwGQzE4JgMhmJwTAZGJ867P8AhFfZEvo4+z/WYdNHM3iGl/CsuZdC79qWOyyLug0Lv2o2WN0Ghd+1Gyxug0Lv2o2WN0Ghd+1Gyxug0Lv2o2WN0Ghd+1MbLG6FTIVQ2iksTZ66dtrnfTjDld62oSYckgAAAAAAAAAAAAAAdXnmFwAAAAABinOn/Ka70I/zWHfh/ew56vsS5uzULfCDkzUGDJmoMGTNQYMmagwZM1BgyZqDBlOYMMZfeGPN7ztSuGlrZfU3agAAAAAAAAAAAAAAHV55hcAAAAAAYvznfyqt9Bn5rCTwnvquWv7uXO9i+wrCwwFhgLDAWGAsMBYYEgAAAAAAAAAAAAAAAAADq88wuAAAAAAMX5zv5VW+gz81hJ4T31XLX93LngvlYAAAAAAAAAAAAAAAAAAAAAAAAADq88wuAAAAAAMX5zv5VW+gz81hJ4T31XLX93LngvlYAAAAAAAAAAAAAAAAAAAAAAAACwHV55hcAAAAAAeHLmTW1tPPSPWzZo3R5ybVYqpscidi2XwN9O80tFo+DW1d0TDmzLWSKigldT1DFjkRVsvzJW9aN3zm/tbLsPQ6epXUruqq70mk4l4Lm7UuAuAuAuAuAuAuAuAuAuAuAuAuAuAuAuAuAuAuBd+THJ6oypM2CFq5t00s9rsgZ0q5d17bk3qctbWrpVzZvp6c3nEN7f7D5N/pe0pP6nU6rHuq9GRnB0AAAAAAAYnzl/I19JCTwvvHLV9lp4tUMAAAAAAAAAAAAAAAAAAAAAA3dyG+RQ+JT8R7cp2n7K/nFu//2Q==',
+      details: '30 days course will give you a lot of learning which will benefited to you'
+    },
+
+    {
+      name: 'Microsoft Excel',
+      cost: 9.0,
+      image: 'data:image/jpeg;base64,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',
+      details: '30 days course will give you a lot of learning which will benefited to you'
+
+    },
+
+    {
+      name: 'Microsoft Powerpoint',
+      cost: 7.0,
+      image: 'https://store-images.s-microsoft.com/image/apps.58754.9007199266252643.2b39c300-b33e-425e-8718-a7883e582ba5.6ba715c6-4d5f-4a33-906d-13a0b1c4359b',
+      details: '30 days course will give you a lot of learning which will benefited to you'
+
+    },
+
+    {
+      name: 'C Programming',
+      cost: 13.0,
+      image: 'data:image/png;base64,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',
+      details: '30 days course will give you a lot of learning which will benefited to you'
+
+    },
+
+    {
+      name: 'Java Programming',
+      cost: 16.0,
+      image: 'https://c7.uihere.com/files/837/18/530/logo-java-runtime-environment-programming-language-runtime-system-oracle-thumb.jpg',
+      details: '30 days course will give you a lot of learning which will benefited to you'
+
+    },
+    {
+      name: 'Javascript',
+      cost: 19.0,
+      image: 'https://seeklogo.com/images/J/javascript-logo-8892AEFCAC-seeklogo.com.png',
+      details: '30 days course will give you a lot of learning which will benefited to you'
+
+    },
+    {
+      name: 'Python',
+      cost: 11.0,
+      image: 'https://seeklogo.com/images/P/python-logo-C50EED1930-seeklogo.com.png',
+      details: '30 days course will give you a lot of learning which will benefited to you'
+
+    },
+
+    {
+      name: 'SQL Database',
+      cost: 4.0,
+      image: 'https://cloudblogs.microsoft.com/uploads/prod/sites/32/2020/05/SQL.png',
+      details: '30 days course will give you a lot of learning which will benefited to you'
+
+    },
+
+    {
+      name: 'MongoDB',
+      cost: 18.0,
+      image: 'https://cdn.theorg.com/1d0c7e50-9da2-4a64-afa4-fcd47047d8a1_thumb.png',
+      details: '30 days course will give you a lot of learning which will benefited to you'
+
+    },
+
+    {
+      name: 'JSON',
+      cost: 11.0,
+      image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/JSON_vector_logo.svg/1200px-JSON_vector_logo.svg.png',
+      details: '30 days course will give you a lot of learning which will benefited to you'
+
+    },
+
+    {
+      name: 'PS Photoshop',
+      cost: 38.0,
+      image: 'https://cdn.worldvectorlogo.com/logos/photoshop-cc.svg',
+      details: '30 days course will give you a lot of learning which will benefited to you'
+
+    },
+
+    {
+      name: 'Angular JS',
+      cost: 19.0,
+      image: 'https://cdn.worldvectorlogo.com/logos/angular-icon.svg',
+      details: '30 days course will give you a lot of learning which will benefited to you'
+
+    },
+
+    {
+      name: 'Android Development',
+      cost: 54.0,
+      image: 'https://cdn.worldvectorlogo.com/logos/android.svg',
+      details: '30 days course will give you a lot of learning which will benefited to you'
+
+    },
+
+    {
+      name: 'Adobe Illustrator ',
+      cost: 33.0,
+      image: 'data:image/png;base64,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',
+      details: '30 days course will give you a lot of learning which will benefited to you'
+
+    }
+
+
+
+
+
+  ])
+
+  const addToCart = (product) => {
+    console.log("we are in add to cart");
+    setCart([...cart,{...product}]);
+  };
+
+  const removeFromCart = (productToRemove) => {
+    setCart(
+      cart.filter((product) => product !== productToRemove)
+    )
+
+  }
+
+  const navigateTo = (nextPage) => {
+    setPage(nextPage);
+  }
+
+  const renderProducts =() =>(
+    <>
+      <div><h1 className="heading">Online Class</h1></div>
+      <h2 className="headline">Course List</h2>
+      <div className="products">
+      {products.map((product,idx)=>(
+        <div className="product" key={idx}>
+        <img src={product.image} alt={product.name}/><br/>
+        <h3>Course Name: {product.name}</h3>
+        <h4 className="priceColor">Price: ${product.cost}</h4>
+        <p>{product.details}</p>
+        <Button variant="primary" className="btn" onClick={() => addToCart(product)}>Enroll Now</Button>
+      </div>
+      ))}
+      </div>
+      </>
+      
+  )
+
+  const getTotalSum = () => {
+    return cart.reduce(
+      (sum, {cost}) => sum + cost, 0)
+  }
+
+  const renderCart = () => (
+    <>
+    <h1>Cart</h1>
+    <h2 className="totalPrice">Total Cost: ${getTotalSum()}</h2>
+    <div className="products">
+    {cart.map((product,idx)=>(
+    <div className="product" key={idx}>
+    
+      <h3>Course Name: {product.name}</h3>
+      <h4 className="priceColor">Price: ${product.cost}</h4>
+      <img src={product.image} alt={product.name}/><br/><br/>
+      <Button variant="danger" onClick={() => removeFromCart(product)}>Remove</Button> 
+    </div>
+    ))}
+    </div>
+    {/* <div>
+      Total Cost: ${getTotalSum()}
+    </div> */}
+    </>
+  )
+
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+      <header>
+        <Button variant="success"  size="lg" className='cartBtn' onClick ={() => navigateTo(PAGE_CART)}>Cart ({cart.length})</Button>
+        <Button variant="secondary" className='cartBtn' onClick ={() => navigateTo(PAGE_PRODUCTS)}>View Products</Button>
       </header>
+      {page === PAGE_PRODUCTS && renderProducts()}
+      {page === PAGE_CART && renderCart()}   
+      
     </div>
   );
 }
